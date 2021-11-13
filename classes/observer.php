@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirrot . '/mod/lti/lib.php');
+require_once($CFG->dirroot . '/mod/lti/lib.php');
 require_once($CFG->dirroot . '/mod/lti/locallib.php');
 
 /**
@@ -62,8 +62,10 @@ abstract class observer {
                     }
                     // Make sure activity grade is initialized.
                     $lti = $DB->get_record('lti', ['id' => $mod->ltiid]);
-                    $lti->cmidnumber = $mod->idnumber;
-                    lti_grade_item_update($lti);
+                    if ($lti !== false) {
+                        $lti->cmidnumber = $mod->idnumber;
+                        lti_grade_item_update($lti);
+                    }
                 }
                 // @codingStandardsIgnoreLine
             } catch (Exception $exception) {
